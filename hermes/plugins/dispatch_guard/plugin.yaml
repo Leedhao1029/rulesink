@@ -1,0 +1,5 @@
+name: dispatch_guard
+version: 1.0.0
+description: 拦截特定领域任务的 execute_code 调用，强制走 L1→L2→L3 调度器
+hooks:
+  - pre_tool_call
