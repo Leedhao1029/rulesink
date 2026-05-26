@@ -273,7 +273,8 @@ MIT — see [LICENSE](LICENSE).
 | Email | lidonghao1029@me.com |
 | Phone | +86 15361474556 |
 | WeChat | LeedHao |
+| Homepage | [leedhao.top](http://leedhao.top/) |
 
 ## GitHub Pages
 
-Documentation site: https://leedhao1029.github.io/ju-mo-rulesink/
+Documentation site: https://leedhao1029.github.io/rulesink/

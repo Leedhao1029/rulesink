@@ -257,7 +257,8 @@ MIT — 见 [LICENSE](LICENSE)。
 | Email | lidonghao1029@me.com |
 | 电话 | +86 15361474556 |
 | 微信 | LeedHao |
+| 个人主页 | [leedhao.top](http://leedhao.top/) |
 
 ## GitHub Pages
 
-文档站点：https://leedhao1029.github.io/ju-mo-rulesink/
+文档站点：https://leedhao1029.github.io/rulesink/
