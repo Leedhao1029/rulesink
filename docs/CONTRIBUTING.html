@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contributing — 矩墨RulesInk</title>
+<style>
+:root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --purple: #bc8cff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+header { border-bottom: 1px solid var(--border); padding: 32px 0; }
+header .inner { display: flex; align-items: center; gap: 16px; }
+.logo { width: 40px; height: 40px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0; }
+header h1 { font-size: 18px; font-weight: 600; color: #fff; }
+header p { font-size: 13px; color: var(--muted); }
+header a.back { margin-left: auto; font-size: 13px; color: var(--muted); }
+.content { padding: 40px 0 60px; }
+.content h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 24px; }
+.content h2 { font-size: 20px; font-weight: 600; color: #fff; margin-top: 36px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.content h3 { font-size: 16px; font-weight: 600; color: #fff; margin-top: 24px; margin-bottom: 12px; }
+.content p { margin-bottom: 16px; }
+.content pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; overflow-x: auto; margin: 16px 0; }
+.content pre code { font-family: 'Courier New', monospace; font-size: 13px; color: var(--text); line-height: 1.5; }
+.content code { background: #000; padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--green); }
+.content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.content th { background: var(--surface); border: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: 13px; color: var(--muted); }
+.content td { border: 1px solid var(--border); padding: 8px 12px; font-size: 14px; }
+.content tr:nth-child(even) td { background: #0d111766; }
+.content hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+.content ul { margin: 12px 0 12px 24px; } .content li { margin-bottom: 6px; }
+.content strong { color: #fff; }
+.explore-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.explore-bar span { font-size: 13px; color: var(--muted); font-weight: 600; margin-right: 8px; }
+.explore-bar a { display: inline-flex; align-items: center; gap: 5px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 5px 10px; border-radius: 5px; }
+.explore-bar a:hover { border-color: var(--accent); text-decoration: none; }
+footer { border-top: 1px solid var(--border); padding: 20px 0; } footer p { font-size: 12px; color: var(--muted); } footer a { color: var(--muted); }</style>
+</head>
+<body>
+<header>
+  <div class="container inner">
+    <div class="logo">H</div>
+    <div>
+      <h1>Contributing</h1>
+      <p>矩墨RulesInk — Open Source Reference Implementation</p>
+    </div>
+    <a class="back" href="index.html">← Documentation Home</a>
+  </div>
+</header>
+<div class="container content">
+<h1 id='contributing-to-ju-mo-rulesink'>Contributing to 矩墨RulesInk</h1>
+<p>MIT License — Pull requests welcome.</p>
+<h2 id='development-setup'>Development Setup</h2>
+<pre><code class="language-bash">git clone https://github.com/Leedhao1029/rulesink.git
+cd ju-mo-rulesink
+pip install -e .
+</code></pre>
+<h2 id='package-structure'>Package Structure</h2>
+<pre><code>ju-mo-rulesink/
+├── hermes/                          # Core framework (MIT)
+│   ├── dispatcher.py                 # L1 intent routing (public interface)
+│   ├── l3_base.py                   # L3 base class (full implementation)
+│   ├── soul_arbiter.py              # SOUL constraint interface
+│   └── base_orchestrator.py          # L2 orchestrator interface
+├── domains/                         # Domain modules (MIT)
+│   ├── it/                           # IT domain
+│   │   ├── orchestrator.py           # IT L2 (public architecture)
+│   │   └── self_evolution.py         # Self-evolution loop (public interface)
+│   ├── ecommerce/
+│   ├── construction/
+│   ├── investment/
+│   ├── life/
+│   └── multimodal/
+├── council/                          # Advisory council (MIT)
+│   └── advisory_council.py           # 4-advisor panel (public architecture)
+├── skills/                           # Skill definitions (MIT)
+├── protocol/                          # Governance protocols (MIT)
+│   └── company_capability_development_protocol.py
+└── examples/
+    ├── minimal_demo.py
+    └── advisory_council_example.py
+</code></pre>
+<h2 id='creating-a-new-l3-script'>Creating a New L3 Script</h2>
+<p>Every L3 script must: 1. Inherit from <code>L3Base</code> 2. Implement <code>run(params: dict) -> dict</code> 3. Call <code>finalize()</code> before returning 4. Include <code>SKILL_NAME</code> constant 5. Follow the handoff protocol</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+"""l3_domain_capability.py — My new L3 script"""
+
+import json
+from pathlib import Path
+from hermes.l3_base import L3Base
+
+SCRIPT_NAME = "l3_domain_capability"
+VERSION = "1.0"
+SKILL_NAME = "my-capability"
+
+class MyCapability(L3Base):
+    def __init__(self):
+        super().__init__()
+        self.SCRIPT_NAME = SKILL_NAME
+        self.VERSION = VERSION
+
+    def run(self, params: dict) -> dict:
+        result = {
+            "finding": "...",
+            "data": [],
+            "issues": [],
+        }
+        verified = self.verify_output(result, ["finding"])
+        result["_verified"] = verified["pass"]
+        return self.finalize(result, quality_status=verified["quality_status"])
+
+if __name__ == "__main__":
+    import sys
+    task = " ".join(sys.argv[1:])
+    result = MyCapability().run({"_raw_task": task})
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+</code></pre>
+<h2 id='creating-a-new-skill'>Creating a New Skill</h2>
+<p>Create <code>skills/my-skill/SKILL.md</code>:</p>
+<pre><code class="language-markdown">---
+name: my-skill
+description: One-line description of what this skill does.
+trigger_on:
+  - keyword1
+  - keyword2
+  - keyword3
+---
+
+# My Skill
+
+## Steps
+1. Step one
+2. Step two
+
+## Pitfalls
+- Common mistake and how to avoid it
+
+## Examples
+### Example 1
+...
+
+## Verification
+How to verify the skill worked correctly.
+</code></pre>
+<h2 id='import-convention'>Import Convention</h2>
+<pre><code class="language-python"># Correct — use the public package interface
+from hermes_native_organization import dispatch, L3Base, SOULArbiter
+
+# Correct — domain-specific imports
+from hermes_native_organization.domains.it.orchestrator import orchestrate
+
+# Wrong — internal paths
+from hermes_native_organization.hermes.dispatcher import _infer_domain  # private
+</code></pre>
+<h2 id='running-tests'>Running Tests</h2>
+<pre><code class="language-bash"># Verify syntax
+python3 -m py_compile hermes/*.py
+python3 -m py_compile domains/*/*.py
+
+# Run example
+python3 examples/advisory_council_example.py
+</code></pre>
+<h2 id='what-not-to-contribute'>What NOT to Contribute</h2>
+<p>- Any code that contains proprietary threshold values - Any code that exposes internal routing algorithms - Any code that contains private pattern databases - Any code that attempts to bypass the SOUL constraint layer</p>
+<h2 id='license'>License</h2>
+<p>MIT — see LICENSE file.</p>
+</div>
+<div class="container">
+<div class="explore-bar">
+  <span>🔍 探索更多</span>
+  <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub 仓库</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/domains">📁 domains/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/council">🧑‍⚖️ council/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/protocol">⚙️ protocol/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/examples">💡 examples/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/hermes">🏛️ hermes/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/skills">📚 skills/</a>
+</div></div>
+
+<footer>
+  <div class="container footer-links">
+    <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub</a>
+    <a href="https://github.com/Leedhao1029/rulesink/issues">Issues</a>
+    <span style="color: var(--border);">|</span>
+    <span>MIT License</span>
+  </div>
+</footer>
+</body></html>

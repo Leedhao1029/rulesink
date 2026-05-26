@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Architecture — 矩墨RulesInk</title>
+<style>
+:root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --purple: #bc8cff; --red: #f85149; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+header { border-bottom: 1px solid var(--border); padding: 32px 0; }
+header .inner { display: flex; align-items: center; gap: 16px; }
+.logo { width: 40px; height: 40px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0; }
+header h1 { font-size: 18px; font-weight: 600; color: #fff; }
+header p { font-size: 13px; color: var(--muted); }
+header a.back { margin-left: auto; font-size: 13px; color: var(--muted); }
+.content { padding: 40px 0 60px; }
+.content h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 24px; }
+.content h2 { font-size: 20px; font-weight: 600; color: #fff; margin-top: 36px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.content h3 { font-size: 16px; font-weight: 600; color: #fff; margin-top: 24px; margin-bottom: 12px; }
+.content p { margin-bottom: 16px; color: var(--text); }
+.content pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; overflow-x: auto; margin: 16px 0; }
+.content pre code { font-family: 'Courier New', Courier, monospace; font-size: 13px; color: var(--text); line-height: 1.5; }
+.content code { background: #000; padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--green); }
+.content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.content th { background: var(--surface); border: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: 13px; color: var(--muted); }
+.content td { border: 1px solid var(--border); padding: 8px 12px; font-size: 14px; }
+.content tr:nth-child(even) td { background: #0d111766; }
+.content hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+.content ul { margin: 12px 0 12px 24px; }
+.content li { margin-bottom: 6px; color: var(--text); }
+.content strong { color: #fff; }
+
+/* Code Example Box */
+.code-example {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-left: 3px solid #58a6ff;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 13px;
+}
+.code-example .label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #58a6ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.code-example pre {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  overflow-x: visible;
+}
+.code-example code {
+  background: transparent;
+  padding: 0;
+  font-size: 12.5px;
+  color: #c9d1d9;
+}
+.code-example a {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #8b949e;
+}
+
+/* Module row */
+.module-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.module-row:last-child { border-bottom: none; }
+.module-row .module-tag {
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent);
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.module-row .module-info { flex: 1; }
+.module-row .module-info strong { color: #fff; font-size: 14px; }
+.module-row .module-info p { font-size: 13px; color: var(--muted); margin: 0; }
+.module-row .module-link {
+  font-size: 12px;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Explore more footer */
+.explore-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-top: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.explore-bar span { font-size: 13px; color: var(--muted); font-weight: 600; margin-right: 8px; }
+.explore-bar a { display: inline-flex; align-items: center; gap: 5px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 5px 10px; border-radius: 5px; }
+.explore-bar a:hover { border-color: var(--accent); text-decoration: none; }
+
+footer { border-top: 1px solid var(--border); padding: 20px 0; margin-top: 0; }
+footer p { font-size: 12px; color: var(--muted); }
+footer a { color: var(--muted); }
+footer .footer-links { display: flex; gap: 16px; }
+footer .footer-links a { color: var(--muted); }
+footer .footer-links a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="container inner">
+    <div class="logo">H</div>
+    <div>
+      <h1>Architecture</h1>
+      <p>矩墨RulesInk — Open Source Reference Implementation</p>
+    </div>
+    <a class="back" href="index.html">← Documentation Home</a>
+  </div>
+</header>
+<div class="container content">
+
+<!-- ── L1–L2–L3 Architecture ── -->
+<h1 id="l1-l2-l3-architecture">L1–L2–L3 Full Governance Hierarchy</h1>
+
+<div class="code-example">
+  <div class="label">📂 hermes/dispatcher.py — L1 路由入口（213行，公开接口）</div>
+  <pre><code>L2_NAMES: Dict[str, str] = {
+    "construction": "建筑工程总经理",
+    "ecommerce":     "电子商务总经理",
+    "investment":    "投资总经理",
+    "it":           "IT技术总经理",
+    "life":         "生活事务总经理",
+    "multimodal":   "多模态总经理",
+    "meta":         "自我进化总经理",
+}
+
+def classify_domain(task: str) -> Dict[str, Any]:
+    """用户自然语言 → 领域识别 → L2 编排器分发"""
+    ...
+
+def detect_content_domain(task: str) -> str:
+    """content_domain 强制路由：trading/code_tech/document"""
+    ...
+
+def write_event(event_type: str, **kwargs) -> None:
+    """所有事件写入 ~/.hermes/events/events.jsonl"""
+    ...</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/dispatcher.py" target="_blank">→ hermes/dispatcher.py（公开接口，算法私有）</a>
+</div>
+
+<pre><code>┌──────────────────────────────────────────────────────────────────────────────┐
+│                          L1: BOARD / COMMANDER (小墨)                        │
+│                                                                              │
+│   Intent Detection → Domain Routing → Cross-Domain Coordination              │
+│   Final Report Aggregation → CEO Decision Support                            │
+│   Advisory Council Convening → IT Audit Gate                                 │
+└───────────────────────────────┬──────────────────────────────────────────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+        ▼                       ▼                       ▼
+┌──────────────────┐ ┌──────────────────┐ ┌──────────────────────────┐
+│   L2: ECOMMERCE  │ │  L2: CONSTRUCTION │  L2: INVESTMENT          │
+│  ecommerce_orch   │ │  construction_orch  │  investment_orch          │
+│  30 L3 scripts     │ │  35 L3 scripts      │  22 L3 scripts           │
+│  ─ Shop运营        │ │  ─ BIM/CAD          │  ─ A股/港股分析         │
+│  ─ 供应链         │ │  ─ 造价清单          │  ─ 量化策略              │
+│  ─ 营销转化       │ │  ─ 施工进度          │  ─ 资金流追踪           │
+└──────────────────┘ └──────────────────┘ └──────────────────────────┘
+        │                       │                       │
+        ▼                       ▼                       ▼
+┌──────────────────┐ ┌──────────────────┐ ┌──────────────────────────┐
+│   L2: IT         │ │  L2: LIFE        │  L2: MULTIMODAL           │
+│  it_orchestrator  │ │  life_orchestrator│  multimodal_orch         │
+│  31 L3 scripts     │ │  18 L3 scripts     │  20 L3 scripts           │
+│  ─ 开发/运维      │ │  ─ 旅游规划        │  ─ 文档处理              │
+│  ─ 安全审计       │ │  ─ 美食酒店        │  ─ 图像/音频             │
+│  ─ 自进化引擎     │ │  ─ 健身健康        │  ─ PPT/报告生成         │
+│  ─ 顾问团审计     │ │                    │                          │
+└────────┬─────────┘ └──────────────────┘ └──────────────────────────┘
+         │
+         ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     L3: SKILL AGENTS                                         │
+│                                                                              │
+│  26 public scripts in this repo: l3_<domain>_<name>.py                      │
+│  All inherit L3Base: run() / analyze() / verify_output() / finalize()       │
+│                                                                              │
+│  180+ scripts in proprietary distribution                                   │
+└──────────────────────────────────────────────────────────────────────────────┘
+         │
+         ├── Self-Evolution Modules (one per domain, 5-stage closed loop)
+         ├── SOUL Arbiter (constitutional constraint layer)
+         └── Enterprise Advisory Council (4 advisors, IT audit gate)
+</code></pre>
+
+<!-- ── Public Modules with Code Links ── -->
+<h2 id="public-modules">公开模块代码示例</h2>
+<p>每个模块均可跳转到 GitHub 源代码。实现细节（阈值、算法、权重）保持私有。</p>
+
+<div class="module-row">
+  <span class="module-tag">L1</span>
+  <div class="module-info">
+    <strong>hermes/dispatcher.py — L1 路由层</strong>
+    <p>领域识别（classify_domain）+ content_domain 强制路由 + 事件写入</p>
+  </div>
+  <a class="module-link" href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/dispatcher.py">213行 →</a>
+</div>
+
+<div class="module-row">
+  <span class="module-tag">L2</span>
+  <div class="module-info">
+    <strong>hermes/base_orchestrator.py — L2 编排器接口</strong>
+    <p>抽象基类：discover_l3_modules() / plan() / execute() / report()</p>
+  </div>
+  <a class="module-link" href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/base_orchestrator.py">156行 →</a>
+</div>
+
+<div class="module-row">
+  <span class="module-tag">L2</span>
+  <div class="module-info">
+    <strong>domains/it/orchestrator.py — IT域 L2 编排器</strong>
+    <p>五步闭环 + L3自动发现 + 七维质量门禁 + build_new_l3() 主循环</p>
+  </div>
+  <a class="module-link" href="https://github.com/Leedhao1029/rulesink/blob/main/domains/it/orchestrator.py">416行 →</a>
+</div>
+
+<div class="module-row">
+  <span class="module-tag">L3</span>
+  <div class="module-info">
+    <strong>hermes/l3_base.py — L3 脚本基类</strong>
+    <p>所有L3脚本继承：standard_header() / verify_output() / remember() / recall() / handoff_prepare()</p>
+  </div>
+  <a class="module-link" href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/l3_base.py">263行 →</a>
+</div>
+
+<div class="module-row">
+  <span class="module-tag">SOUL</span>
+  <div class="module-info">
+    <strong>hermes/soul_arbiter.py — 宪法约束层</strong>
+    <p>audit() / check_authorization() / escalate()，判决 PASS / FLAG / BLOCK</p>
+  </div>
+  <a class="module-link" href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/soul_arbiter.py">301行 →</a>
+</div>
+
+<div class="module-row">
+  <span class="module-tag">Council</span>
+  <div class="module-info">
+    <strong>council/advisory_council.py — 顾问团</strong>
+    <p>四顾问并发（ThreadPoolExecutor）+ IT审计门禁 + 模式提炼</p>
+  </div>
+  <a class="module-link" href="https://github.com/Leedhao1029/rulesink/blob/main/council/advisory_council.py">442行 →</a>
+</div>
+
+<!-- ── L2 Orchestrator ── -->
+<h2 id="l2-orchestrator">L2 编排器标准接口</h2>
+
+<div class="code-example">
+  <div class="label">📂 hermes/base_orchestrator.py — L2 抽象基类（156行）</div>
+  <pre><code>from abc import ABC, abstractmethod
+
+class L3Module:
+    def __init__(self, name: str, path: Path, skill_name: str = None):
+        self.name = name       # e.g. "l3_it_code_review"
+        self.path = path       # Absolute path to .py file
+        self.skill_name = skill_name or name
+
+class L2Orchestrator(ABC):
+    def discover_l3_modules(self) -> List[L3Module]:
+        """Auto-discover all L3 scripts by naming convention."""
+        ...
+
+    def plan(self, task: str, context: dict) -> OrchestrationPlan:
+        """Classify intent → select L3 skills → build execution DAG."""
+        ...
+
+    def execute(self, plan: OrchestrationPlan) -> ExecutionResult:
+        """Run selected L3 modules, collect results, handle errors."""
+        ...
+
+    def report(self, result: ExecutionResult) -> str:
+        """Synthesize L3 outputs into domain-specific report."""
+        ...</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/base_orchestrator.py" target="_blank">→ base_orchestrator.py</a>
+</div>
+
+<div class="code-example">
+  <div class="label">📂 domains/it/orchestrator.py — build_new_l3() 主循环（416行公开）</div>
+  <pre><code>def _build_new_l3_from_task(self, task: str, gap_info: dict) -> dict:
+    # Step 1: 分析需求类型 → 分类为 NEW_SKILL / BROKEN_SCRIPT / ARCHITECTURAL
+    capability_type = self._classify_capability_type(task)
+
+    # Step 2: 生成脚本框架（L3Base继承 + SKILL_NAME + 标准方法）
+    script_template = self._generate_script_template(capability_type)
+
+    # Step 3: 填充核心逻辑（基于gap分析结果）
+    filled = self._fill_script_logic(script_template, gap_info)
+
+    # Step 4: 写入临时目录 + 语法验证（py_compile）
+    written_path = self._write_and_verify(filled)
+
+    # Step 5: 熔断门禁检查（SOUL约束层验证）
+    safety_result = self._safety_gate_check(written_path)
+    if not safety_result["passed"]:
+        return {"status": "BLOCKED", "reason": safety_result["reason"]}
+
+    return {"status": "READY", "path": written_path}</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/domains/it/orchestrator.py" target="_blank">→ it/orchestrator.py（416行，完整五步闭环）</a>
+</div>
+
+<!-- ── L3 Base ── -->
+<h2 id="l3-base">L3 脚本标准基类</h2>
+
+<div class="code-example">
+  <div class="label">📂 hermes/l3_base.py — L3Base 标准接口（263行）</div>
+  <pre><code>class L3Base:
+    SCRIPT_NAME = "l3-base"
+    VERSION = "1.0"
+    DEFAULT_STATUS = "NEEDS_WORK"
+
+    def standard_header(self, quality_status: str = None) -> dict:
+        return {
+            "script_name": self.SCRIPT_NAME,
+            "version": self.VERSION,
+            "timestamp": datetime.now().isoformat(),
+            "quality_status": quality_status or self.DEFAULT_STATUS,
+            "handoff": {
+                "ready_for": [],      # 这份输出能给哪些下游脚本用
+                "needs_from": [],     # 执行这份任务还需要什么输入
+                "pending": [],         # 还没做完的部分
+                "constraints": [],    # 下游需要注意的约束
+            },
+            "evidence": {},            # 证据（截图/数据源/验证结果）
+            "issues": [],              # 发现的问题
+        }
+
+    def analyze(self, task: str) -> dict:         # 标准入口
+    def verify_output(self, result, fields): ...  # 质量门禁
+    def finalize(self, result: dict) -> dict:    # 标准返回封装
+    def remember(self, key, value, tags): ...     # 项目记忆写入
+    def recall(self, key) -> Optional[Any]: ...   # 项目记忆召回
+    def handoff_prepare(self, to_script, output): # 跨脚本交接
+    def get_data(self, preferred_source, **kwargs): # 三层数据源</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/l3_base.py" target="_blank">→ l3_base.py（263行，完整L3Base实现）</a>
+</div>
+
+<!-- ── Self-Evolution ── -->
+<h2 id="self-evolution-loop">自进化5阶段闭环</h2>
+
+<div class="code-example">
+  <div class="label">📂 domains/it/self_evolution.py — diagnose() 阶段（378行公开）</div>
+  <pre><code>def diagnose(analysis_result: Dict) -> Dict[str, Any]:
+    # Stage 2 DIAGNOSE: 将ANALYZE阶段收集的问题分类
+    issues = []
+    for script in analysis_result.get("health_metrics", {}).get("scripts_with_issues", []):
+        severity   = _classify_severity(script)      # CRITICAL / WARNING / MINOR
+        category   = _classify_issue(script)           # MISSING_SKILL / WEAK_SKILL / ...
+        recommendation = _get_recommendation(category) # 修复建议文本
+        issues.append({
+            "item": script, "severity": severity,
+            "category": category, "recommendation": recommendation,
+        })
+    return {
+        "stage": "diagnose", "issues": issues,
+        "critical_count": sum(1 for i in issues if i["severity"] == "CRITICAL"),
+        "warning_count": sum(1 for i in issues if i["severity"] == "WARNING"),
+    }</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/domains/it/self_evolution.py" target="_blank">→ self_evolution.py（378行，5阶段闭环架构，算法私有）</a>
+</div>
+
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    SELF-EVOLUTION LOOP                            │
+│                                                                 │
+│    ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐    │
+│    │ ANALYZE │───▶│ DIAGNOSE │───▶│  PLAN   │───▶│ EXECUTE │    │
+│    └─────────┘    └─────────┘    └─────────┘    └─────────┘    │
+│                                                     │           │
+│                              ◀──────────────────────┘           │
+│                                      │                            │
+│                              ┌───────┴───────┐                   │
+│                              │     LEARN     │                   │
+│                              │  (autobiography)│                 │
+│                              └───────────────┘                   │
+└─────────────────────────────────────────────────────────────────┘
+
+Stage 1: ANALYZE     → Scan L3 scripts, skills, archives
+Stage 2: DIAGNOSE    → Identify gaps, classify severity (CRITICAL/WARNING/MINOR)
+Stage 3: PLAN         → Generate build proposals
+Stage 4: EXECUTE     → User-confirmed changes
+Stage 5: LEARN       → Record to autobiography, update weights
+</code></pre>
+
+<table>
+<tr><th>域</th><th>自进化模块</th><th>行数</th><th>公开内容</th></tr>
+<tr><td>IT</td><td><code>domains/it/self_evolution.py</code></td><td>378</td><td>5阶段闭环架构 + 接口</td></tr>
+<tr><td>Ecommerce</td><td><code>domains/ecommerce/self_evolution.py</code></td><td>730</td><td>公开接口桩</td></tr>
+<tr><td>Construction</td><td><code>domains/construction/self_evolution.py</code></td><td>781</td><td>公开接口桩</td></tr>
+<tr><td>Investment</td><td><code>domains/investment/self_evolution.py</code></td><td>841</td><td>公开接口桩</td></tr>
+<tr><td>Life</td><td><code>domains/life/self_evolution.py</code></td><td>725</td><td>公开接口桩</td></tr>
+<tr><td>Multimodal</td><td><code>domains/multimodal/self_evolution.py</code></td><td>727</td><td>公开接口桩</td></tr>
+</table>
+
+<!-- ── SOUL ── -->
+<h2 id="soul-arbitration">SOUL 宪法约束层</h2>
+
+<div class="code-example">
+  <div class="label">📂 hermes/soul_arbiter.py — SOUL仲裁器接口（301行）</div>
+  <pre><code>class SOULArbiter:
+    """
+    Constitutional constraint layer for all L3 outputs.
+    audit(output, context) → AuditResult
+    check_authorization(action, actor) → bool
+    escalate(conflict) → dict
+    """
+
+    def audit(self, output: str, context: dict) -> AuditResult:
+        """
+        AuditResult:
+            verdict: PASS | FLAG | BLOCK
+            flags: List[str]           # annotations
+            redacted_content: str      # filtered version if blocked
+            event_log: dict           # for compliance trail
+        """
+        ...
+
+    def check_authorization(self, action: str, actor: str) -> bool:
+        """Boundary enforcement — who can do what."""
+        ...
+
+    def escalate(self, conflict: dict) -> dict:
+        """Unresolvable conflicts → L1 CEO arbitration."""
+        ...</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/hermes/soul_arbiter.py" target="_blank">→ soul_arbiter.py（接口公开，模式数据库私有）</a>
+</div>
+
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│                    SOUL.md ARBITER                           │
+│                                                              │
+│   L3 Output ──▶ Pattern Matcher ──▶ Verdict                  │
+│                                   ├── PASS   (clear)          │
+│                                   ├── FLAG    (caution)       │
+│                                   └── BLOCK  (violation)     │
+│                                                              │
+│   BLOCK → content filtered, event logged, user notified      │
+│   FLAG  → content annotated, advisory note attached          │
+└──────────────────────────────────────────────────────────────┘
+
+Constraint Types:
+  • Role override    — advisor/L3 attempts to direct L2 or L1
+  • Decision rights  — advisor output claims decision authority
+  • Security red     — unauthorized external API calls
+  • Language norm    — prohibited AI jargon / filler words
+  • Data integrity   — output missing verification evidence
+</code></pre>
+
+<p><strong>公开</strong>: 接口契约 + 行为描述。<strong>私有</strong>: 实际regex表达式 + threshold值。</p>
+
+<!-- ── Advisory Council ── -->
+<h2 id="advisory-council">Enterprise Advisory Council</h2>
+
+<div class="code-example">
+  <div class="label">📂 council/advisory_council.py — 四顾问并发架构（442行）</div>
+  <pre><code>import concurrent.futures
+
+def convene_council(question: str) -> CouncilReport:
+    advisors = [
+        StrategicAdvisor(),   # 商业模式 / 市场格局 / 战略一致性
+        TechnicalAdvisor(),   # 技术可行性 / 架构风险 / 集成复杂度
+        RiskAdvisor(),        # 合规义务 / 安全面 / 尾风险缓释
+        EvolutionAdvisor(),   # 模式提炼 / Skill缺口 / 流程改进
+    ]
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {executor.submit(a.analyze, question): a for a in advisors}
+        results = {futurs.result() for futu in concurrent.futures.as_completed(futures)}
+
+    synthesis = synthesize(results)    # 四份独立分析 → 综合报告
+    audit = it_security_audit(synthesis)  # IT部门审计门禁
+    return CouncilReport(advice=synthesis, audit_result=audit)</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/council/advisory_council.py" target="_blank">→ council/advisory_council.py（442行）</a>
+</div>
+
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│              ENTERPRISE ADVISORY COUNCIL                     │
+│                                                              │
+│   Question ──▶ [STRATEGIC] ──┐                              │
+│              ──▶ [TECHNICAL] ──┼──▶ Synthesis ──▶ CEO     │
+│              ──▶ [RISK]      ──┤                              │
+│              ──▶ [EVOLUTION] ──┘                              │
+│                                                              │
+│   IT Department: permanent owner + security auditor         │
+│   Output: Advisory report — L2 retains full decision auth  │
+└──────────────────────────────────────────────────────────────┘
+</code></pre>
+
+<table>
+<tr><th>顾问</th><th>职责</th><th>回答的问题</th></tr>
+<tr><td>Strategic Advisor</td><td>商业价值评估</td><td>商业影响？时机？机会成本？战略一致性？</td></tr>
+<tr><td>Technical Advisor</td><td>可行性 + 架构</td><td>技术可行？集成风险？复杂度？更优方案？</td></tr>
+<tr><td>Risk Advisor</td><td>风险 + 合规</td><td>合规义务？安全面？尾风险？缓释策略？</td></tr>
+<tr><td>Evolution Advisor</td><td>组织学习</td><td>可泛化模式？Skill缺口？新L3机会？流程改进？</td></tr>
+</table>
+
+<!-- ── CCDSP ── -->
+<h2 id="ccdsp">CCDSP 治理框架</h2>
+
+<pre><code>Chapter 1:  总则        — Purpose, scope, five core principles
+Chapter 2:  自主进化权   — Each L2 owns its self-evolution module
+Chapter 3:  贡献规范    — 5-step contribution workflow + quality standards
+Chapter 4:  共享归属    — Shared capabilities belong to company, not one domain
+Chapter 5:  跨部门协作  — Primary + supporting domain coordination rules
+Chapter 6:  技术中台    — IT as platform: builds tools, doesn't build-for-others
+Chapter 7:  附则        — Enforcement, amendment process
+</code></pre>
+
+<div class="code-example">
+  <div class="label">📂 protocol/company_capability_development_protocol.py — 治理框架（115行）</div>
+  <pre><code>class CCDSPSevenChapters:
+    CHAPTER1 = "总则"       # Purpose, scope, five core principles
+    CHAPTER2 = "自主进化权"  # Each L2 owns its self-evolution module
+    CHAPTER3 = "贡献规范"   # 5-step contribution workflow + quality standards
+    CHAPTER4 = "共享归属"   # Shared capabilities → company, not one domain
+    CHAPTER5 = "跨部门协作"  # Primary + supporting coordination rules
+    CHAPTER6 = "技术中台"   # IT builds tools, not build-for-others
+    CHAPTER7 = "附则"       # Enforcement + amendment process</code></pre>
+  <a href="https://github.com/Leedhao1029/rulesink/blob/main/protocol/company_capability_development_protocol.py" target="_blank">→ protocol.py（115行，完整7章框架）</a>
+</div>
+
+<h3 id="five-step-workflow">5步贡献工作流</h3>
+<pre><code>Step 1  BUILD    → Domain builds new capability using own self-evolution module
+Step 2  SELF-TEST → Passes through domain check mode
+Step 3  PROPOSE  → Generates contribution proposal (impact analysis)
+Step 4  APPROVE  → Tiered: domain-L2 / cross-L2+L1 / all-L2+L1
+Step 5  REGISTER  → Add to L3 script library + skill catalog
+Step 6  ARCHIVE  → Record in autobiography for traceability
+</code></pre>
+
+<!-- ── Package Structure ── -->
+<h2 id="package-structure">包结构</h2>
+<pre><code>ju-mo-rulesink/
+├── hermes/                      # Core framework
+│   ├── __init__.py
+│   ├── dispatcher.py             # L1 intent routing  [213行] 📂
+│   ├── base_orchestrator.py     # L2 interface       [156行] 📂
+│   ├── l3_base.py               # L3 base class      [263行] 📂
+│   └── soul_arbiter.py          # Constraint layer   [301行] 📂
+│
+├── domains/                     # Domain modules (public interfaces)
+│   ├── it/
+│   │   ├── orchestrator.py      # IT L2 [416行] 📂
+│   │   └── self_evolution.py    # 5-stage loop [378行] 📂
+│   ├── ecommerce/  self_evolution.py [730行公开接口]
+│   ├── construction/ self_evolution.py [781行公开接口]
+│   ├── investment/  self_evolution.py [841行公开接口]
+│   ├── life/        self_evolution.py [725行公开接口]
+│   └── multimodal/  self_evolution.py [727行公开接口]
+│
+├── council/                     # Advisory council
+│   └── advisory_council.py      # 4-advisor panel [442行] 📂
+│
+├── protocol/                    # Governance
+│   └── company_capability_development_protocol.py [115行] 📂
+│
+├── skills/                      # Skill definitions
+│   ├── company-capability-development-protocol/  [56行]
+│   └── enterprise-advisory-council/              [49行]
+│
+└── docs/                        # This documentation site
+</code></pre>
+
+<!-- ── Facts ── -->
+<h2 id="facts">公开代码库实测数据</h2>
+<table>
+<tr><th>指标</th><th>数值</th><th>备注</th></tr>
+<tr><td>公开代码总量</td><td><strong>4,941 行</strong></td><td>实测统计，含.py/.md/.html</td></tr>
+<tr><td>公开模块</td><td><strong>7 个核心文件</strong></td><td>dispatcher/base_orchestrator/l3_base/soul_arbiter/orchestrator/self_evolution/advisory_council</td></tr>
+<tr><td>自进化模块</td><td><strong>6 个域</strong></td><td>IT公开架构，其他域公开接口桩</td></tr>
+<tr><td>Skills 发布</td><td><strong>2 个</strong></td><td>CCDSP + Enterprise Advisory Council</td></tr>
+<tr><td>顾问团</td><td><strong>1 个</strong></td><td>4顾问并发，IT部门审计，无决策权</td></tr>
+</table>
+
+</div>
+
+<!-- ── Explore More ── -->
+<div class="container">
+  <div class="explore-bar">
+    <span>🔍 探索更多</span>
+    <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub 仓库</a>
+    <a href="https://github.com/Leedhao1029/rulesink/tree/main/domains">📁 domains/</a>
+    <a href="https://github.com/Leedhao1029/rulesink/tree/main/council">🧑‍⚖️ council/</a>
+    <a href="https://github.com/Leedhao1029/rulesink/tree/main/protocol">⚙️ protocol/</a>
+    <a href="https://github.com/Leedhao1029/rulesink/tree/main/examples">💡 examples/</a>
+    <a href="https://github.com/Leedhao1029/rulesink/tree/main/hermes">🏛️ hermes/</a>
+    <a href="https://github.com/Leedhao1029/rulesink/tree/main/skills">📚 skills/</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container footer-links">
+    <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub</a>
+    <a href="https://github.com/Leedhao1029/rulesink/issues">Issues</a>
+    <span style="color: var(--border);">|</span>
+    <span>MIT License</span>
+  </div>
+</footer>
+</body>
+</html>

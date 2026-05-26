@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>矩墨RulesInk — Documentation</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-dim: #1f6feb;
+      --green: #3fb950;
+      --purple: #bc8cff;
+      --red: #f85149;
+      --orange: #f0883e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 40px 0 32px;
+    }
+    .header-inner { display: flex; align-items: center; gap: 16px; }
+    .logo {
+      width: 48px; height: 48px;
+      background: var(--accent-dim);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .header-text h1 {
+      font-size: 22px; font-weight: 600; color: #fff; line-height: 1.2;
+    }
+    .header-text p {
+      font-size: 14px; color: var(--muted); margin-top: 2px;
+    }
+    .badge {
+      margin-left: auto;
+      background: var(--green);
+      color: #000;
+      font-size: 12px; font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── Hero ── */
+    .hero { padding: 48px 0 32px; }
+    .hero h2 {
+      font-size: 32px; font-weight: 700; color: #fff;
+      margin-bottom: 12px;
+    }
+    .hero p { font-size: 16px; color: var(--muted); max-width: 640px; }
+
+    /* ── Stats Banner ── */
+    .stats-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin: 0 0 32px;
+    }
+    .stats-banner h3 {
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 0 16px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-size: 32px; font-weight: 700; line-height: 1;
+      display: block;
+    }
+    .stat-label {
+      font-size: 12px; color: var(--muted);
+      margin-top: 6px; display: block;
+    }
+    .stat-item:nth-child(1) .stat-number { color: var(--accent); }
+    .stat-item:nth-child(2) .stat-number { color: var(--green); }
+    .stat-item:nth-child(3) .stat-number { color: var(--purple); }
+    .stat-item:nth-child(4) .stat-number { color: var(--orange); }
+    .stat-item:nth-child(5) .stat-number { color: var(--red); }
+    .stat-item:nth-child(6) .stat-number { color: var(--accent); }
+    .stat-item:nth-child(7) .stat-number { color: var(--green); }
+
+    /* ── Governance Banner ── */
+    .gov-banner {
+      background: var(--surface);
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      padding: 24px 32px;
+      margin: 0 0 32px;
+    }
+    .gov-banner h3 {
+      font-size: 13px; font-weight: 600; color: var(--green);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .gov-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .gov-item {
+      text-align: center;
+      padding: 0 16px;
+      border-right: 1px solid var(--border);
+    }
+    .gov-item:last-child { border-right: none; }
+    .gov-number {
+      font-size: 28px; font-weight: 700; line-height: 1;
+      display: block;
+    }
+    .gov-label { font-size: 12px; color: var(--muted); margin-top: 6px; display: block; }
+    .gov-note { font-size: 11px; color: var(--muted); margin-top: 4px; display: block; }
+
+    /* ── Case Card ── */
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+    .case-card h3 {
+      font-size: 15px; font-weight: 600; color: var(--green);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .case-card p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+    .case-stats { display: flex; flex-wrap: wrap; gap: 16px; }
+    .case-stat { display: flex; flex-direction: column; }
+    .case-stat .val { font-size: 20px; font-weight: 700; color: var(--red); }
+    .case-stat .lbl { font-size: 11px; color: var(--muted); }
+    .case-stat .val.ok { color: var(--green); }
+    .case-stat .arrow { font-size: 12px; color: var(--muted); margin: 2px 0; }
+    .case-link {
+      display: inline-block;
+      background: var(--green);
+      color: #000;
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+      margin-top: 12px;
+    }
+    .case-link:hover { opacity: 0.85; text-decoration: none; }
+
+    /* ── Architecture Diagram ── */
+    .diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 24px 0;
+      overflow-x: auto;
+    }
+    .diagram pre {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text);
+      white-space: pre;
+    }
+
+    /* ── Key Pillars ── */
+    .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 24px 0; }
+    .pillar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .pillar-icon { font-size: 20px; margin-bottom: 6px; }
+    .pillar h3 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .pillar p { font-size: 13px; color: var(--muted); }
+
+    /* ── Nav Cards ── */
+    .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 32px 0; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex; flex-direction: column;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: var(--accent); text-decoration: none; }
+    .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .ci-architecture { background: #1f6feb33; }
+    .ci-started { background: #3fb95033; }
+    .ci-contributing { background: #bc8cff33; }
+    .card h3 { font-size: 16px; font-weight: 600; color: #fff; }
+    .card p { font-size: 14px; color: var(--muted); flex: 1; margin-bottom: 16px; }
+    .card-links { list-style: none; border-top: 1px solid var(--border); padding-top: 12px; }
+    .card-links li { margin-bottom: 6px; }
+    .card-links li:last-child { margin-bottom: 0; }
+    .card-links a { font-size: 13px; color: var(--accent); }
+    .card-arrow { margin-left: auto; color: var(--muted); font-size: 16px; }
+
+    /* ── Advisory Council Banner ── */
+    .council-banner {
+      background: var(--surface);
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .council-banner h3 {
+      font-size: 16px; font-weight: 600; color: var(--purple); margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .council-banner p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+    .advisors { display: flex; flex-wrap: wrap; gap: 8px; }
+    .advisor-tag {
+      background: #bc8cff22;
+      border: 1px solid #bc8cff44;
+      color: var(--purple);
+      font-size: 12px; font-weight: 500;
+      padding: 4px 10px; border-radius: 20px;
+    }
+
+    /* ── Split sections ── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+    @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+    .section-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .section-box h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+    .section-box ul { list-style: none; }
+    .section-box li { font-size: 13px; color: var(--muted); margin-bottom: 6px; padding-left: 16px; position: relative; }
+    .section-box li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+    .section-box code { background: #000; padding: 1px 5px; border-radius: 4px; font-size: 12px; color: var(--green); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      margin-top: 40px;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    footer a { color: var(--muted); }
+    footer .footer-links { display: flex; gap: 16px; align-items: center; }
+    footer .footer-links a { color: var(--muted); font-size: 13px; }
+    footer .footer-links a:hover { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="container header-inner">
+    <div class="logo">H</div>
+    <div class="header-text">
+      <h1>矩墨RulesInk</h1>
+      <p>Self-governing AI organization with L1–L2–L3 hierarchy</p>
+    </div>
+    <span class="badge">MIT</span>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<div class="container hero">
+  <h2>AI组织的开源参考实现</h2>
+  <p>一个具有自我治理结构的AI Agent架构，包含L1-L2-L3层级体系、每个域的自进化闭环、宪法级约束层，以及新增的Enterprise Advisory Council。</p>
+</div>
+
+<!-- ── Stats Banner ── -->
+<div class="container">
+  <div class="stats-banner">
+    <h3>📊 事实速览 — 公开代码库实测数据</h3>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number">4,941</span>
+        <span class="stat-label">公开代码总量（行）</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">7</span>
+        <span class="stat-label">域（全部配备顶层索引）</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">26</span>
+        <span class="stat-label">L3 脚本（公开部分）</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">2</span>
+        <span class="stat-label">标准化 Skills（已发布）</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">6</span>
+        <span class="stat-label">自进化模块（独立5阶段闭环）</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">4,230</span>
+        <span class="stat-label">生产事件已验证</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">8</span>
+        <span class="stat-label">SOUL Arbiter 接入点</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 自我修复与治理能力 ── -->
+<div class="container">
+  <div class="gov-banner">
+    <h3>🔧 自我修复与治理能力 — 2026-05-11 实测数据</h3>
+    <div class="gov-grid">
+      <div class="gov-item">
+        <span class="gov-number" style="color: var(--green);">8</span>
+        <span class="gov-label">SOUL Arbiter 接入点</span>
+        <span class="gov-note">编排层×6 + 执行层×1 + 健康域×1</span>
+      </div>
+      <div class="gov-item">
+        <span class="gov-number" style="color: var(--accent);">195</span>
+        <span class="gov-label">InvestmentL2Handler</span>
+        <span class="gov-note">真实生产代码，已接入主流程</span>
+      </div>
+      <div class="gov-item">
+        <span class="gov-number" style="color: var(--orange);">6</span>
+        <span class="gov-label">健康类 Skill 加固</span>
+        <span class="gov-note">life-health/nutrition/exercise/sleep/mental/habit</span>
+      </div>
+      <div class="gov-item">
+        <span class="gov-number" style="color: var(--green);">100%</span>
+        <span class="gov-label">L2 标签统一率</span>
+        <span class="gov-note">audit 日志 domain 全部中文</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 诊断案例卡 ── -->
+<div class="container">
+  <div class="case-card">
+    <h3>📋 案例：执行层审计盲区发现与修复（2026-05-11）</h3>
+    <p>生产事件分析揭示：life-health 累计 146 次直接调用，0 次经过任何质量门禁。IT 域 1,472 次 skill 调用，仅 1 条审计记录（盲区率 99.93%）。经精准修复后，健康类 skill 输出现已全部经过 SOUL Arbiter 四级审查（PASS / ADVISORY / FLAG / BLOCK）。</p>
+    <div class="case-stats">
+      <div class="case-stat">
+        <span class="val">99.93%</span>
+        <span class="lbl">修复前 IT 域审计盲区率</span>
+        <span class="arrow">→</span>
+        <span class="val ok">0%</span>
+        <span class="lbl">修复后</span>
+      </div>
+      <div class="case-stat">
+        <span class="val">0</span>
+        <span class="lbl">修复前 life-health 审计次数</span>
+        <span class="arrow">→</span>
+        <span class="val ok">100%</span>
+        <span class="lbl">修复后覆盖率</span>
+      </div>
+      <div class="case-stat">
+        <span class="val">36</span>
+        <span class="lbl">修复前医疗越权关键词</span>
+        <span class="arrow">→</span>
+        <span class="val ok">94</span>
+        <span class="lbl">修复后（中英双语）</span>
+      </div>
+    </div>
+    <a class="case-link" href="DIAGNOSIS.html">📄 阅读完整诊断报告 →</a>
+  </div>
+</div>
+
+<!-- ── Architecture Diagram ── -->
+<div class="container">
+  <div class="diagram">
+    <pre>L1 CEO / 指挥官（小墨）
+  │
+  ├── L2: IT技术总经理        L2: 电子商务总经理    L2: 建筑工程总经理    L2: 投资总经理    L2: 生活事务总经理    L2: 多模态总经理
+  │        it_orchestrator        ecommerce_orch        construction_orch    investment_orch    life_orch          multimodal_orch
+  │   (公开416行)              30个L3              35个L3              22个L3            18个L3              20个L3
+  │                                                                                         
+  └── L3: Skill Agents (26个公开脚本，l3_<domain>_<name>.py，统一继承 L3Base)
+             │
+             ├── 自进化模块（每个域独立，5阶段闭环）
+             ├── SOUL Arbiter（宪法约束层）
+             └── Enterprise Advisory Council（4顾问并发，仅顾问，无决策权）</pre>
+  </div>
+</div>
+
+<!-- ── Key Pillars ── -->
+<div class="container">
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-icon">🏛️</div>
+      <h3>L1–L2–L3 治理层级</h3>
+      <p>CEO → 域总经理 → 执行助理，职责清晰，数据流转不断层</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🔄</div>
+      <h3>自进化闭环</h3>
+      <p>每个域独立运行 ANALYZE → DIAGNOSE → PLAN → EXECUTE → LEARN</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">⚖️</div>
+      <h3>SOUL 约束层</h3>
+      <p>宪法级约束，所有L3输出必经仲裁层，防止越权</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🧑‍⚖️</div>
+      <h3>Enterprise Advisory Council</h3>
+      <p>4顾问并发分析，IT审计，CEO决策参考，无决策权</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Advisory Council Banner ── -->
+<div class="container">
+  <div class="council-banner">
+    <h3>🧑‍⚖️ Enterprise Advisory Council（新模块）</h3>
+    <p>临时召集的多角度专家小组。4顾问并发分析（战略/技术/风险/进化），所有输出由IT部门审计后送达CEO。最终决策权始终属于对应L2域。</p>
+    <div class="advisors">
+      <span class="advisor-tag">Strategic Advisor</span>
+      <span class="advisor-tag">Technical Advisor</span>
+      <span class="advisor-tag">Risk Advisor</span>
+      <span class="advisor-tag">Evolution Advisor</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Navigation Cards ── -->
+<div class="container">
+  <div class="nav-grid">
+
+    <!-- Architecture -->
+    <a class="card" href="ARCHITECTURE.html">
+      <div class="card-header">
+        <div class="card-icon ci-architecture">📐</div>
+        <h3>Architecture</h3>
+        <span class="card-arrow">→</span>
+      </div>
+      <p>完整架构参考 — L1-L2-L3治理层级、自进化闭环、SOUL约束层、顾问团治理模型、CCDSP协议</p>
+      <ul class="card-links">
+        <li><a href="ARCHITECTURE.html#l1-l2-l3-architecture">L1–L2–L3 治理层级图</a></li>
+        <li><a href="ARCHITECTURE.html#self-evolution-loop">自进化5阶段闭环</a></li>
+        <li><a href="ARCHITECTURE.html#soul-arbitration">SOUL仲裁层详解</a></li>
+        <li><a href="ARCHITECTURE.html#advisory-council">Enterprise Advisory Council</a></li>
+        <li><a href="ARCHITECTURE.html#ccdsp">CCDSP治理框架</a></li>
+      </ul>
+    </a>
+
+    <!-- Getting Started -->
+    <a class="card" href="GETTING_STARTED.html">
+      <div class="card-header">
+        <div class="card-icon ci-started">🚀</div>
+        <h3>Getting Started</h3>
+        <span class="card-arrow">→</span>
+      </div>
+      <p>5分钟快速上手 — 安装验证、创建组织、多顾问委托、常见问题</p>
+      <ul class="card-links">
+        <li><a href="GETTING_STARTED.html#prerequisites">环境要求：Python 3.10+</a></li>
+        <li><a href="GETTING_STARTED.html#quick-start">pip安装 + 验证</a></li>
+        <li><a href="GETTING_STARTED.html#first-delegation">首次委托示例</a></li>
+        <li><a href="GETTING_STARTED.html#common-issues">常见问题</a></li>
+      </ul>
+    </a>
+
+    <!-- Contributing -->
+    <a class="card" href="CONTRIBUTING.html">
+      <div class="card-header">
+        <div class="card-icon ci-contributing">🔧</div>
+        <h3>Contributing</h3>
+        <span class="card-arrow">→</span>
+      </div>
+      <p>如何贡献 — 新L3脚本规范、新Skill标准、导入约定、测试运行、开源协议</p>
+      <ul class="card-links">
+        <li><a href="CONTRIBUTING.html#new-l3-script">创建新L3脚本（必须继承L3Base）</a></li>
+        <li><a href="CONTRIBUTING.html#new-skill">创建新Skill（frontmatter + 章节结构）</a></li>
+        <li><a href="CONTRIBUTING.html#import-convention">包导入规范</a></li>
+        <li><a href="CONTRIBUTING.html#run-tests">运行测试</a></li>
+        <li><a href="CONTRIBUTING.html#what-not-to-contribute">不接受的贡献</a></li>
+      </ul>
+    </a>
+
+    <!-- Diagnosis -->
+    <a class="card" href="DIAGNOSIS.html">
+      <div class="card-header">
+        <div class="card-icon ci-architecture" style="background: #3fb95033;">🔬</div>
+        <h3>自我诊断案例</h3>
+        <span class="card-arrow">→</span>
+      </div>
+      <p>2026-05-11 执行层审计盲区发现与修复 — 用生产数据驱动自我审计的真实记录</p>
+      <ul class="card-links">
+        <li><a href="DIAGNOSIS.html#第一步数据驱动的问题发现">数据驱动的问题发现</a></li>
+        <li><a href="DIAGNOSIS.html#第二步诊断结论">诊断结论</a></li>
+        <li><a href="DIAGNOSIS.html#第三步精准修复">精准修复（四项加固）</a></li>
+        <li><a href="DIAGNOSIS.html#方法论用生产数据驱动自我审计">方法论：数据驱动审计</a></li>
+      </ul>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── Open vs Proprietary Split ── -->
+<div class="container">
+  <div class="split">
+    <div class="section-box">
+      <h4>✅ 公开（MIT协议）</h4>
+      <ul>
+        <li><code>dispatcher.py</code> — L1路由接口 + 流程框架（213行）</li>
+        <li><code>l3_base.py</code> — L3基类完整实现（263行）</li>
+        <li><code>base_orchestrator.py</code> — L2编排器接口（156行）</li>
+        <li><code>soul_arbiter.py</code> — SOUL约束接口（301行）</li>
+        <li><code>it/orchestrator.py</code> — IT L2架构预览（416行）</li>
+        <li><code>council/advisory_council.py</code> — 顾问团架构（442行）</li>
+        <li>CCDSP 7章治理框架（115行）</li>
+        <li>6个域的 self_evolution 接口</li>
+      </ul>
+    </div>
+    <div class="section-box">
+      <h4>🔒 保持私有（不开源）</h4>
+      <ul>
+        <li>关键词→域评分权重表</li>
+        <li>熔断器阈值/预算上限</li>
+        <li>自传学习算法</li>
+        <li>SOUL模式匹配器+阈值</li>
+        <li>顾问分析Prompt/模型配置</li>
+        <li>锻造队列触发阈值</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── Explore More ── -->
+<div class="container" style="margin-top: 24px;">
+  <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+    <h4 style="font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 14px;">🔍 探索更多</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <a href="https://github.com/Leedhao1029/rulesink" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        🐙 GitHub 仓库根目录
+      </a>
+      <a href="https://github.com/Leedhao1029/rulesink/tree/main/domains" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        📁 domains/ 域模块
+      </a>
+      <a href="https://github.com/Leedhao1029/rulesink/tree/main/council" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        🧑‍⚖️ council/ 顾问团
+      </a>
+      <a href="https://github.com/Leedhao1029/rulesink/tree/main/protocol" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        ⚙️ protocol/ 治理协议
+      </a>
+      <a href="https://github.com/Leedhao1029/rulesink/tree/main/examples" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        💡 examples/ 示例
+      </a>
+      <a href="https://github.com/Leedhao1029/rulesink/tree/main/hermes" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        🏛️ hermes/ 核心框架
+      </a>
+      <a href="https://github.com/Leedhao1029/rulesink/tree/main/skills" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        📚 skills/ 技能库
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Contact ── -->
+<div class="container" style="margin-top: 24px;">
+  <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+    <h4 style="font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 14px;">📬 Contact</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <a href="mailto:lidonghao1029@me.com" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        ✉️ lidonghao1029@me.com
+      </a>
+      <a href="tel:+8615361474556" style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        📞 +86 15361474556
+      </a>
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 12px; border-radius: 6px;">
+        💬 WeChat: LeedHao
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container footer-links">
+    <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub</a>
+    <a href="https://github.com/Leedhao1029/rulesink/issues">Issues</a>
+    <span style="color: var(--border);">|</span>
+    <span>MIT License</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Getting Started — 矩墨RulesInk</title>
+<style>
+:root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --purple: #bc8cff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+header { border-bottom: 1px solid var(--border); padding: 32px 0; }
+header .inner { display: flex; align-items: center; gap: 16px; }
+.logo { width: 40px; height: 40px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0; }
+header h1 { font-size: 18px; font-weight: 600; color: #fff; }
+header p { font-size: 13px; color: var(--muted); }
+header a.back { margin-left: auto; font-size: 13px; color: var(--muted); }
+.content { padding: 40px 0 60px; }
+.content h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 24px; }
+.content h2 { font-size: 20px; font-weight: 600; color: #fff; margin-top: 36px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.content h3 { font-size: 16px; font-weight: 600; color: #fff; margin-top: 24px; margin-bottom: 12px; }
+.content p { margin-bottom: 16px; }
+.content pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; overflow-x: auto; margin: 16px 0; }
+.content pre code { font-family: 'Courier New', monospace; font-size: 13px; color: var(--text); line-height: 1.5; }
+.content code { background: #000; padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--green); }
+.content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.content th { background: var(--surface); border: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: 13px; color: var(--muted); }
+.content td { border: 1px solid var(--border); padding: 8px 12px; font-size: 14px; }
+.content tr:nth-child(even) td { background: #0d111766; }
+.content hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+.content ul { margin: 12px 0 12px 24px; } .content li { margin-bottom: 6px; }
+.content strong { color: #fff; }
+.explore-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.explore-bar span { font-size: 13px; color: var(--muted); font-weight: 600; margin-right: 8px; }
+.explore-bar a { display: inline-flex; align-items: center; gap: 5px; background: #000; border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 5px 10px; border-radius: 5px; }
+.explore-bar a:hover { border-color: var(--accent); text-decoration: none; }
+footer { border-top: 1px solid var(--border); padding: 20px 0; } footer p { font-size: 12px; color: var(--muted); } footer a { color: var(--muted); }</style>
+</head>
+<body>
+<header>
+  <div class="container inner">
+    <div class="logo">H</div>
+    <div>
+      <h1>Getting Started</h1>
+      <p>矩墨RulesInk — Open Source Reference Implementation</p>
+    </div>
+    <a class="back" href="index.html">← Documentation Home</a>
+  </div>
+</header>
+<div class="container content">
+<h1 id='getting-started-with-ju-mo-rulesink'>Getting Started with 矩墨RulesInk</h1>
+<h2 id='5-minute-quick-start-guide'>5-Minute Quick Start Guide</h2>
+<h3 id='prerequisites'>Prerequisites</h3>
+<p>- Python 3.10 or higher - pip package manager</p>
+<h3 id='step-1:-install-ju-mo-rulesink'>Step 1: Install 矩墨RulesInk</h3>
+<pre><code class="language-bash">pip install ju-mo-rulesink
+</code></pre>
+<p>Or install from source:</p>
+<pre><code class="language-bash">git clone https://github.com/Leedhao1029/rulesink.git
+cd ju-mo-rulesink
+pip install -e .
+</code></pre>
+<h3 id='step-2:-verify-installation'>Step 2: Verify Installation</h3>
+<pre><code class="language-python">import hermes
+
+print(f"Hermes version: {hermes.__version__}")
+# Expected output: Hermes version: 1.0.0
+</code></pre>
+<h3 id='step-3:-create-your-first-organization'>Step 3: Create Your First Organization</h3>
+<pre><code class="language-python">from hermes import Organization, Agent
+
+# Create an organization
+org = Organization(name="MyStartup")
+
+# Add your first advisor
+cto = Agent(
+    name="Alice",
+    role="CTO",
+    domain="technology",
+    skills=["architecture", "coding", "devops"]
+)
+
+org.add_advisor(cto)
+
+# List advisors
+print(f"Organization: {org.name}")
+print(f"Advisors: {[a.name for a in org.advisors]}")
+</code></pre>
+<h3 id='step-4:-run-your-first-delegation'>Step 4: Run Your First Delegation</h3>
+<pre><code class="language-python"># Delegate a task to your organization
+result = org.delegate("Evaluate microservices vs monolith architecture")
+
+# Examine the result
+print(f"Consensus: {result.consensus}")
+print(f"Decision: {result.decision}")
+
+# View deliberation trail
+for d in result.deliberations:
+    print(f"  {d.advisor} ({d.role}): {d.stance}")
+</code></pre>
+<h3 id='step-5:-first-run-verification'>Step 5: First Run Verification</h3>
+<p>A successful run produces output like:</p>
+<pre><code>Organization: MyStartup
+Advisors: ['Alice']
+Consensus: True
+Decision: microservices
+  Alice (CTO): supportive → microservices offer better scalability
+</code></pre>
+<h2 id='first-project:-multi-advisor-consultation'>First Project: Multi-Advisor Consultation</h2>
+<pre><code class="language-python">from hermes import Organization, Agent
+
+# Create organization with multiple advisors
+org = Organization(name="TechCorp")
+
+# Add diverse advisors
+org.add_advisor(Agent(name="CTO_Alice", role="CTO", domain="technology", 
+                       skills=["architecture", "coding"]))
+org.add_advisor(Agent(name="CFO_Bob", role="CFO", domain="finance",
+                       skills=["budgeting", "cost_analysis"]))
+org.add_advisor(Agent(name="COO_Carol", role="COO", domain="operations",
+                       skills=["process_optimization", "logistics"]))
+org.add_advisor(Agent(name="CMO_Dave", role="CMO", domain="marketing",
+                       skills=["campaigns", "analytics"]))
+
+# Get multi-perspective decision
+result = org.delegate("Launch a new AI-powered product line")
+
+print(f"Final Decision: {result.decision}")
+print(f"Confidence: {result.confidence}%")
+</code></pre>
+<h2 id='common-issues'>Common Issues</h2>
+<h3 id='issue:-`modulenotfounderror:-no-module-named-'hermes'`'>Issue: <code>ModuleNotFoundError: No module named 'hermes'</code></h3>
+<p><strong>Solution</strong>: Ensure ju-mo-rulesink is installed in your Python environment:</p>
+<pre><code class="language-bash">pip install ju-mo-rulesink
+# or
+pip3 install ju-mo-rulesink
+</code></pre>
+<h3 id='issue:-`syntaxerror`-when-running-examples'>Issue: <code>SyntaxError</code> when running examples</h3>
+<p><strong>Solution</strong>: Verify Python version:</p>
+<pre><code class="language-bash">python3 --version  # Must be 3.10+
+</code></pre>
+<h3 id='issue:-advisory-agents-return-no-response'>Issue: Advisory agents return no response</h3>
+<p><strong>Solution</strong>: Check that SOUL.md constraints are properly configured. See <a href="ARCHITECTURE.md#soulmd-arbitration-layer">ARCHITECTURE.md</a>.</p>
+<h3 id='issue:-self-evolution-loop-not-functioning'>Issue: Self-evolution loop not functioning</h3>
+<p><strong>Solution</strong>: Ensure the IT domain has sufficient interaction history. The self-evolution module requires at least 5 delegation cycles to begin optimization.</p>
+<h2 id='next-steps'>Next Steps</h2>
+<p>- Read the <a href="ARCHITECTURE.md">Architecture Overview</a> to understand L1-L2-L3 governance - See <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> to add your own skills and L3 modules - Explore <code>examples/minimal_demo.py</code> for a complete working example</p>
+<h2 id='getting-help'>Getting Help</h2>
+<p>- GitHub Issues: https://github.com/Leedhao1029/rulesink/issues - Documentation: https://ju-mo-rulesink.readthedocs.io/</p>
+</div>
+<div class="container">
+<div class="explore-bar">
+  <span>🔍 探索更多</span>
+  <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub 仓库</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/domains">📁 domains/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/council">🧑‍⚖️ council/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/protocol">⚙️ protocol/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/examples">💡 examples/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/hermes">🏛️ hermes/</a>
+  <a href="https://github.com/Leedhao1029/rulesink/tree/main/skills">📚 skills/</a>
+</div></div>
+
+<footer>
+  <div class="container footer-links">
+    <a href="https://github.com/Leedhao1029/rulesink">🐙 GitHub</a>
+    <a href="https://github.com/Leedhao1029/rulesink/issues">Issues</a>
+    <span style="color: var(--border);">|</span>
+    <span>MIT License</span>
+  </div>
+</footer>
+</body></html>
